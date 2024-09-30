@@ -1,12 +1,17 @@
 /** @type {import('next').NextConfig} */
+const routeMapping = {
+  "/home": "/pages/home",
+  "/login": "/pages/login",
+  "/signup": "/pages/signup",
+  // Add more routes here
+};
+
 const nextConfig = {
   async rewrites() {
-    return [
-      {
-        source: "/home",
-        destination: "/pages/home",
-      },
-    ];
+    return Object.entries(routeMapping).map(([source, destination]) => ({
+      source,
+      destination,
+    }));
   },
 };
 
