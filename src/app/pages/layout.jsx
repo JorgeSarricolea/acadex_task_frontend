@@ -1,4 +1,4 @@
-import "@/app/assets/styles/globals.css";
+import "@/app/styles/globals.css";
 
 export const metadata = {
   title: "App Pages",
