@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const routeMapping = {
+  "/": "/pages/home",
   "/home": "/pages/home",
   "/login": "/pages/login",
   "/signup": "/pages/signup",
