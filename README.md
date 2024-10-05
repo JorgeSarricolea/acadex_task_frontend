@@ -67,7 +67,7 @@ Here is an example of a possible title and description:
 
 An illustrative image of the PR editor screen is attached below to help clarify the process further.
 
-![Example of a PR detected on GitHub](/src/app/assets/img/pr_example_2.png)
+![Example of a PR detected on GitHub](/src/app/assets/img/pr_example_2.webp)
 
 6. Once you have filled out the title and description and clicked the submit button, the Pull Request (PR) will be created. Now, you just need to wait for the repository administrator to either accept or reject it.
 
