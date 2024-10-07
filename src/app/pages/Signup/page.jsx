@@ -10,6 +10,7 @@ import bg_vecC from '../../public/assets/bg/pc/VectorC.svg'; // Imagen de fondo 
 import bg_vecM from '../../public/assets/bg/cel/Vector.svg'; // Imagen de fondo para pantallas pequeñas (mancha).
 import bg_vecCM from '../../public/assets/bg/cel/VectorC.svg'; // Imagen de fondo secundaria para pantallas pequeñas (circulos).
 
+
 export default function Signup() {
   // Estado para manejar las imágenes de fondo, inicializadas para pantallas grandes.
   const [bgImage, setBgImage] = useState({ primary: bg_vec, secondary: bg_vecC });
