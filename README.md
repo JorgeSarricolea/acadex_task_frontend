@@ -50,7 +50,7 @@ git push login-branch
 
 4. After pushing your branch, navigate to GitHub, where you should see a notification, usually highlighted in yellow. At this point, click on the green button that says "Compare and Pull Request." You may also refer to an image attached below for easier identification.
 
-![Example of a PR detected on GitHub](/src/app/assets/img/pr_example.png)
+![Example of a PR detected on GitHub](/src/app/public/assets/img/pr_example.png)
 
 5. After clicking "Compare and Pull Request," an editor will open, prompting you to write a title and description for the Pull Request (PR). This helps explain the changes made and their importance.
 
@@ -67,7 +67,7 @@ Here is an example of a possible title and description:
 
 An illustrative image of the PR editor screen is attached below to help clarify the process further.
 
-![Example of a PR detected on GitHub](/src/app/assets/img/pr_example_2.webp)
+![Example of a PR detected on GitHub](/src/app/public/assets/img/pr_example_2.webp)
 
 6. Once you have filled out the title and description and clicked the submit button, the Pull Request (PR) will be created. Now, you just need to wait for the repository administrator to either accept or reject it.
 
