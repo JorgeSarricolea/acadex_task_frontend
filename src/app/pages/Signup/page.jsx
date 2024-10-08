@@ -10,6 +10,7 @@ import email_icon from "@/app/public/assets/icons/email.svg";
 import password_icon from "@/app/public/assets/icons/password.svg";
 import { registerUser } from "@/app/application/use-cases/auth/SignupUser.js";
 
+
 export default function Signup() {
   const router = useRouter();
   const bgImage = useResponsiveBackground();
