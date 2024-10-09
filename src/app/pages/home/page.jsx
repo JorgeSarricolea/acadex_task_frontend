@@ -1,12 +1,16 @@
 "use client";
 
 import { useAuth } from "@/app/hooks/useAuth";
+import Header from "@/app/components/Header";
 
 function Home() {
   const { userEmail } = useAuth();
 
   return (
-    <div>{userEmail ? <h1>Welcome {userEmail}!</h1> : <p>Loading...</p>}</div>
+    <div>
+      <Header />
+      <main className="p-4"></main>
+    </div>
   );
 }
 
