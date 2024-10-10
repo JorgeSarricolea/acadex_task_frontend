@@ -4,14 +4,16 @@ import { useState } from "react";
 import { useForm } from "@/app/hooks/useForm.js";
 import { useRouter } from "next/navigation";
 import { useResponsiveBackground } from "@/app/hooks/useResponsiveBackground";
-import FormInput from "@/app/components/FormInputs.js";
+import FormInput from "@/app/components/FormInputs";
 import user_icon from "@/app/public/assets/icons/person.svg";
 import password_icon from "@/app/public/assets/icons/password.svg";
 import { authenticateUser } from "@/app/application/use-cases/auth/LoginUser.js";
+import { getUserById } from "@/app/application/services/UserService";
 import {
   setToken,
   setUserId,
   setUserEmail,
+  setUserName,
 } from "@/app/application/services/StorageService.js";
 
 export default function Login() {
@@ -39,6 +41,12 @@ export default function Login() {
         setToken(token);
         setUserId(id);
         setUserEmail(email);
+
+        const userDetails = await getUserById(id);
+
+        if (userDetails.firstName) {
+          setUserName(userDetails.firstName);
+        }
 
         router.push("/home");
       }
