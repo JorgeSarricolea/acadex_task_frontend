@@ -4,12 +4,11 @@ import { useState } from "react";
 import { useForm } from "@/app/hooks/useForm.js";
 import { useRouter } from "next/navigation";
 import { useResponsiveBackground } from "@/app/hooks/useResponsiveBackground";
-import FormInput from "@/app/components/FormInputs.js";
+import FormInput from "@/app/components/FormInputs";
 import user_icon from "@/app/public/assets/icons/person.svg";
 import email_icon from "@/app/public/assets/icons/email.svg";
 import password_icon from "@/app/public/assets/icons/password.svg";
 import { registerUser } from "@/app/application/use-cases/auth/SignupUser.js";
-
 
 export default function Signup() {
   const router = useRouter();
