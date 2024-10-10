@@ -4,11 +4,13 @@ import { useAuth } from "@/app/hooks/useAuth";
 import { removeToken } from "@/app/application/services/StorageService";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import EditUserModal from "./EditUserModal"; // Importa el modal
 
 function Header() {
   const { userEmail } = useAuth();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false); // Controla el menú lateral (hamburger)
+  const [isModalOpen, setIsModalOpen] = useState(false); // Controla la visibilidad del modal
 
   const handleLogout = () => {
     removeToken();
@@ -16,7 +18,13 @@ function Header() {
   };
 
   const handleEditUser = () => {
-    // TODO: Implement edit user with a modal
+    // Abre el modal al hacer clic en "Editar usuario"
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    // Cierra el modal
+    setIsModalOpen(false);
   };
 
   return (
@@ -100,6 +108,9 @@ function Header() {
           </div>
         </div>
       )}
+
+      {/* Modal */}
+      <EditUserModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </header>
   );
 }
