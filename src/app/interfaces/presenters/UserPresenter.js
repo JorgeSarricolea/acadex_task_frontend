@@ -7,7 +7,7 @@ export class UserPresenter {
       firstName: responseData.firstName,
       lastName: responseData.lastName,
       email: responseData.email,
-      token: responseData.token,
+      token: responseData.token || undefined,
     });
   }
 
