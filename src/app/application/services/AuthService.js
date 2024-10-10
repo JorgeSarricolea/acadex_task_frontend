@@ -1,16 +1,6 @@
 import endpoints from "@/app/infrastructure/config/configAPI.js";
 import { UserPresenter } from "@/app/interfaces/presenters/UserPresenter.js";
 
-/**
- * The function `validateToken` asynchronously validates a token by sending a POST request to a
- * specified endpoint and returns an object indicating whether the token is valid along with decoded
- * data if valid.
- * @param token - The `validateToken` function you provided is used to validate a token by sending a
- * POST request to a specific endpoint with the token in the Authorization header. If the response
- * indicates that the token is valid, the function returns an object with `isValid` set to true and the
- * decoded token data. If
- * @returns The `validateToken` function returns an object with the following structure:
- */
 export const validateToken = async (token) => {
   try {
     const response = await fetch(endpoints.validateToken, {
@@ -22,24 +12,22 @@ export const validateToken = async (token) => {
     });
 
     if (!response.ok) {
-      return { isValid: false };
+      if (response.status === 401) {
+        return { isValid: false }; // Return an object, not just a boolean
+      }
+      throw new Error("Failed to validate token");
     }
 
     const responseData = await response.json();
 
-    if (responseData.message === "Token is valid") {
-      return {
-        isValid: true,
-        decoded: responseData.decoded,
-      };
-    } else {
-      return { isValid: false };
-    }
+    return {
+      isValid: responseData.message === "Token is valid", // Return a boolean isValid
+      decoded: responseData.decoded, // Decoded token data (if necessary)
+    };
   } catch (error) {
-    return { isValid: false };
+    return { isValid: false }; // Return false in case of error
   }
 };
-
 
 /**
  * The `signupUser` function sends a POST request to a signup endpoint with user data, handles response
@@ -89,29 +77,33 @@ export const signupUser = async (userData) => {
  * }
  */
 export const loginUser = async (email, password) => {
-  const response = await fetch(endpoints.login, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-  });
+  try {
+    const response = await fetch(endpoints.login, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-  if (!response.ok) {
-    const contentType = response.headers.get("content-type");
-    if (contentType && contentType.includes("application/json")) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Error de autenticación");
-    } else {
-      throw new Error(
-        `Unexpected server response: ${response.status} ${response.statusText}`
-      );
+    if (!response.ok) {
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Authentication error");
+      } else {
+        throw new Error(
+          `Unexpected server response: ${response.status} ${response.statusText}`
+        );
+      }
     }
+
+    const responseData = await response.json();
+
+    return {
+      token: responseData.token,
+    };
+  } catch (error) {
+    throw new Error(error.message || "Error during login");
   }
-
-  const responseData = await response.json();
-
-  return {
-    token: responseData.token,
-  };
 };
