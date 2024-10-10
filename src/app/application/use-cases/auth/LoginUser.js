@@ -12,7 +12,7 @@ export const authenticateUser = async (input) => {
     const validationResponse = await validateToken(token);
 
     if (!validationResponse.isValid) {
-      throw new Error("Invalid token");
+      throw new Error("Invalid or expired token");
     }
 
     return {
@@ -20,6 +20,7 @@ export const authenticateUser = async (input) => {
       decoded: validationResponse.decoded,
     };
   } catch (error) {
+    console.error("Authentication error:", error.message);
     throw new Error(error.message || "Error during authentication");
   }
 };
