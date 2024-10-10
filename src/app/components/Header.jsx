@@ -1,29 +1,36 @@
 "use client";
 
-import { useAuth } from "@/app/hooks/useAuth";
-import { removeToken } from "@/app/application/services/StorageService";
+import {
+  clearStorage,
+  getUserName,
+} from "@/app/application/services/StorageService";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import EditUserModal from "./EditUserModal"; // Importa el modal
+import { useState, useEffect } from "react";
+import EditUserModal from "./EditUserModal";
 
 function Header() {
-  const { userEmail } = useAuth();
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Controla el menú lateral (hamburger)
-  const [isModalOpen, setIsModalOpen] = useState(false); // Controla la visibilidad del modal
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const storedUserName = getUserName();
+    if (storedUserName) {
+      setUserName(storedUserName);
+    }
+  }, []);
 
   const handleLogout = () => {
-    removeToken();
+    clearStorage();
     router.push("/login");
   };
 
   const handleEditUser = () => {
-    // Abre el modal al hacer clic en "Editar usuario"
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    // Cierra el modal
     setIsModalOpen(false);
   };
 
@@ -51,9 +58,9 @@ function Header() {
       </div>
 
       <div>
-        {userEmail ? (
+        {userName ? (
           <div className="flex items-center">
-            <span>Hola, {userEmail}</span>
+            <span>Hola, {userName}</span>
           </div>
         ) : (
           <p>Loading...</p>
