@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/app/hooks/useAuth";
 import Header from "@/app/components/Header";
+import TaskBoard from "@/app/components/TaskBoard";
 
 function Home() {
   const { userEmail } = useAuth();
@@ -9,7 +10,9 @@ function Home() {
   return (
     <div>
       <Header />
-      <main className="p-4"></main>
+      <main className="p-4">
+      <TaskBoard />
+      </main>
     </div>
   );
 }
