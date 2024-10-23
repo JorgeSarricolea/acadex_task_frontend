@@ -5,13 +5,13 @@ import Header from "@/app/components/Header";
 import TaskBoard from "@/app/components/TaskBoard";
 
 function Home() {
-  const { userEmail } = useAuth();
+  useAuth();
 
   return (
     <div>
       <Header />
       <main className="p-4">
-      <TaskBoard />
+        <TaskBoard />
       </main>
     </div>
   );
