@@ -8,6 +8,17 @@ const endpoints = {
   // Users
   getUserById: (userId) => `${BASE_URL}/users/${userId}`,
   updateUser: (userId) => `${BASE_URL}/users/${userId}`,
+
+  // Homeworks
+  getAllHomeworks: `${BASE_URL}/homeworks`,
+  getHomeworkById: (homeworkId) => `${BASE_URL}/homeworks/${homeworkId}`,
+  updateHomework: (homeworkId) => `${BASE_URL}/homeworks/${homeworkId}`,
+  deleteHomework: (homeworkId) => `${BASE_URL}/homeworks/${homeworkId}`,
+  createHomework: `${BASE_URL}/homeworks`,
+
+  // Categories
+  getAllCategories: `${BASE_URL}/categories`,
+  getCategoryById: (categoryId) => `${BASE_URL}/categories/${categoryId}`,
 };
 
 export default endpoints;
