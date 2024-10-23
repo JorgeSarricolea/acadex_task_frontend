@@ -6,7 +6,7 @@ import {
 } from "@/app/application/services/StorageService";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import EditUserModal from "./EditUserModal";
+import EditUserModal from "./modals/EditUserModal";
 
 function Header() {
   const router = useRouter();
@@ -69,7 +69,7 @@ function Header() {
 
       {/* Sidebar */}
       {sidebarOpen && (
-        <div className="absolute left-0 top-0 h-full w-64 bg-gray-800 text-white shadow-md">
+        <div className="absolute left-0 top-0 h-full w-64 bg-gray-800 text-white shadow-md sidebar">
           <div className="p-4 flex flex-col h-full">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-semibold">Acadex</h2>
