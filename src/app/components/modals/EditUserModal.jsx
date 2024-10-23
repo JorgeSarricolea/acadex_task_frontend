@@ -76,7 +76,10 @@ function EditUserModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+    <div
+      className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+      style={{ zIndex: 1000 }}
+    >
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg sm:w-3/4 md:w-1/2 lg:w-1/3">
         <h2 className="text-3xl font-medium mb-4 text-blue-600 font-montserrat">
           Editar Usuario
