@@ -1,75 +1,78 @@
+# Frontend Documentation
+
+## Introduction
+This frontend interacts with the backend API [Acadex Task Backend](https://github.com/JorgeSarricolea/acadex_task_backend) to manage categories, tasks (homeworks), and users, using Clean Architecture principles.
+
 ## Getting Started
 
-First, you need to run the development server:
+1. **Clone the repository:**
+   ```bash
+   git clone <frontend-repository-url>
+   cd <frontend-repository-folder>
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Then open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page will automatically update as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Workflow
-
-1. First, identify which branch you are currently on. It is helpful to give branches meaningful names. To check which branch you’re on, use the following command:
-
-```bash
-git branch
-```
-
-2. For instance, if you worked on the login feature, your branch might be called "login." To ensure you have the latest version of the complete application, run the following command:
-
-```bash
-git pull origin main
-```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
 > [!TIP]
-> This command will pull all the latest changes, ensuring that you do not run into conflicts or lose any changes when you push your updates.
+> Ensure that you use the same Node.js version as the backend to avoid compatibility issues.
 
-> [!WARNING]
-> In case of conflicts, Git will indicate which files are causing the conflicts. You will need to decide whether to accept the incoming changes or keep your current ones. Incoming changes are the newly pulled updates, while current changes are those already present in your local workspace.
+3. **Run the frontend application:**
+   ```bash
+   npm start
+   ```
 
-3. If everything goes smoothly and there are no conflicts, you will receive all updates from the `main` branch. Now, it’s time to push your updated branch to the remote repository using the following command:
+> [!IMPORTANT]
+> Ensure the backend server is running to enable proper interaction.
 
-```bash
-# Replace login-branch with the actual name of the branch you are working on
-git push login-branch
-```
+## Features
 
-> [!WARNING]
-> Make sure all of your changes are committed before pushing them.
+### Services
+Located in `src/app/application/services`, these services manage API requests to interact with resources:
 
-4. After pushing your branch, navigate to GitHub, where you should see a notification, usually highlighted in yellow. At this point, click on the green button that says "Compare and Pull Request." You may also refer to an image attached below for easier identification.
+- **AuthService**: Manages user authentication, including login and registration.
+- **CategoryService**: Retrieves data related to categories.
+- **HomeworkService**: Handles task operations such as creation, updating, and deletion.
+- **StorageService**: Stores and retrieves data from local storage.
+- **UserService**: Fetches and updates user information.
 
-![Example of a PR detected on GitHub](/src/app/public/assets/img/pr_example.png)
+### Use Cases
+Located in `src/app/application/use-cases`, each module provides specific use cases:
 
-5. After clicking "Compare and Pull Request," an editor will open, prompting you to write a title and description for the Pull Request (PR). This helps explain the changes made and their importance.
+- **auth**: Manages user login and registration (`LoginUser.js`, `SignupUser.js`).
+- **category**: Retrieves all categories and category details (`GetAllCategories.js`, `GetCategoryById.js`).
+- **homework**: CRUD operations for tasks (`CreateHomework.js`, `DeleteHomework.js`, `GetAllHomeworks.js`, `GetHomeworkById.js`, `UpdateHomework.js`).
+- **user**: Gets user details and allows updates (`GetUserById.js`, `UpdateUser.js`).
 
-Here is an example of a possible title and description:
+### Components
+Located in `src/app/components`, these components are modular and reusable:
 
-**Title:**
-"Add login feature and authentication flow"
+- **Modals**: Various modals for adding, editing, and deleting tasks (`AddTaskModal`, `EditTaskModal`, `DeleteTaskModal`, `EditUserModal`).
+- **TaskBoard**: Primary component for the task board interface.
+- **FormInputs**: Reusable form input components.
+- **AddTaskButton**: Button to activate the task creation modal.
+- **DraggableTaskCard**: Task card with drag-and-drop functionality.
+- **Header** and **Tag**: Additional components for structure and styling.
 
-**Description:**
-"This PR adds the login feature, including user authentication using email and password. It uses NextAuth for session handling and implements input validation to prevent invalid entries. This is the first step towards providing user-specific content within the application."
+### Hooks
+Located in `src/app/hooks`, these custom hooks increase reusability and functionality:
 
-> [!WARNING]
-> Make sure that you are creating the PR from the branch you worked on to the `main` branch to prevent incorrect merges or other issues. Refer to the attached image for visual guidance.
+- **useAuth**: Manages authentication state.
+- **useForm**: Custom hook for form handling.
+- **useResponsiveBackground**: Manages background based on screen size.
 
-An illustrative image of the PR editor screen is attached below to help clarify the process further.
+### API Configuration
+In `src/app/infrastructure/config`, the `configAPI.js` file contains the configuration to connect with the API, with the URL defined directly in the code.
 
-![Example of a PR detected on GitHub](/src/app/public/assets/img/pr_example_2.webp)
+### Pages
+Located in `src/app/pages`, these are the primary application pages:
 
-6. Once you have filled out the title and description and clicked the submit button, the Pull Request (PR) will be created. Now, you just need to wait for the repository administrator to either accept or reject it.
+- **Home** (`home/page.jsx`): Main page displaying tasks and categories.
+- **Login** (`login/page.jsx`): Login form.
+- **Signup** (`Signup/page.jsx`): User registration page.
+- **Layout** (`layout.jsx`): Provides a common layout across pages.
 
-> [!TIP]
-> If the administrator **accepts** the PR, it means that there were no conflicts, and your changes have been successfully merged into the `main` branch. However, if the PR is **rejected**, this usually means there are conflicts that need to be resolved before merging. In such cases, you will have to resolve these conflicts and then resubmit the PR for review.
+### Assets
+Located in `src/app/public/assets`, this folder contains images, icons, and backgrounds.
