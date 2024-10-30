@@ -49,13 +49,11 @@ function EditTaskModal({ isOpen, onClose, task, onSave, categories }) {
       style={{ zIndex: 1000 }}
     >
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg sm:w-3/4 md:w-1/2 lg:w-1/3">
-        <h2 className="text-3xl font-semibold mb-4 text-blue-600">
-          Editar Tarea
-        </h2>
+        <h2 className="text-3xl font-semibold mb-4 text-blue-600">Edit task</h2>
         <form className="space-y-4" onSubmit={handleSave}>
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Nombre de la Tarea
+              Title
             </label>
             <input
               type="text"
@@ -68,7 +66,7 @@ function EditTaskModal({ isOpen, onClose, task, onSave, categories }) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Descripción de la Tarea
+              Description
             </label>
             <textarea
               value={description}
@@ -79,7 +77,7 @@ function EditTaskModal({ isOpen, onClose, task, onSave, categories }) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Fecha de Inicio
+              Start date
             </label>
             <input
               type="date"
@@ -91,7 +89,7 @@ function EditTaskModal({ isOpen, onClose, task, onSave, categories }) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Fecha de Fin
+              Due date
             </label>
             <input
               type="date"
@@ -103,7 +101,7 @@ function EditTaskModal({ isOpen, onClose, task, onSave, categories }) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Categoría
+              Category
             </label>
             <select
               value={categoryId}
@@ -111,7 +109,7 @@ function EditTaskModal({ isOpen, onClose, task, onSave, categories }) {
               className="w-full px-4 py-2.5 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
-              <option value="">Seleccionar categoría</option>
+              <option value="">Select category</option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -125,13 +123,13 @@ function EditTaskModal({ isOpen, onClose, task, onSave, categories }) {
               onClick={onClose}
               className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-md"
             >
-              Guardar
+              Save
             </button>
           </div>
         </form>

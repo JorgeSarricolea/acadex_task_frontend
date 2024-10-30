@@ -10,24 +10,24 @@ const DeleteTaskModal = ({ isOpen, onClose, onConfirm, taskTitle }) => {
       style={{ zIndex: 1000 }}
     >
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4">Eliminar tarea</h2>
+        <h2 className="text-xl font-bold mb-4">Delete task</h2>
         <p className="mb-4">
-          ¿Estás seguro de que quieres eliminar la tarea{" "}
-          <span className="font-semibold">"{taskTitle}"</span>? Esta acción no
-          se puede deshacer.
+          ¿Are you sure you want to delete the task{" "}
+          <span className="font-semibold">"{taskTitle}"</span>? This action does
+          not can be undone.
         </p>
         <div className="flex justify-end space-x-4">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
           >
-            Cancelar
+            Cancel
           </button>
           <button
             onClick={onConfirm}
             className="px-4 py-2 bg-red-500 text-white rounded-md"
           >
-            Eliminar
+            Delete
           </button>
         </div>
       </div>

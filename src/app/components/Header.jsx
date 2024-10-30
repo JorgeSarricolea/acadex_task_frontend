@@ -60,7 +60,7 @@ function Header() {
       <div>
         {userName ? (
           <div className="flex items-center">
-            <span>Hola, {userName}</span>
+            <span>Hi, {userName}</span>
           </div>
         ) : (
           <p>Loading...</p>
@@ -101,7 +101,7 @@ function Header() {
                 onClick={handleEditUser}
                 className="text-sm hover:bg-gray-700 w-full text-left px-4 py-2 rounded-md mb-2"
               >
-                Editar usuario
+                Edit user
               </button>
 
               {/* Log user out */}
@@ -109,7 +109,7 @@ function Header() {
                 onClick={handleLogout}
                 className="text-sm hover:bg-gray-700 w-full text-left px-4 py-2 rounded-md"
               >
-                Cerrar sesión
+                Log out
               </button>
             </div>
           </div>

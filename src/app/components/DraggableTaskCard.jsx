@@ -23,7 +23,7 @@ const DraggableTaskCard = ({ task, onDelete, onEdit, categoryName }) => {
         <h3 className="font-bold">{task.title}</h3>
         <p>{task.description}</p>
         <p>
-          <strong>Fecha de entrega:</strong> {formatDate(task.endDate)}
+          <strong>Due date:</strong> {formatDate(task.endDate)}
         </p>
         <div className="mt-2">
           <Tag label={categoryName} />
