@@ -34,6 +34,11 @@ function TaskBoard() {
   const [taskToDelete, setTaskToDelete] = useState(null);
   const [userId, setUserId] = useState(null);
 
+  const openModalForColumn = (column) => {
+    setCurrentColumn(column);
+    setIsModalOpen(true);
+  };
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUserId = sessionStorage.getItem("userId");
@@ -198,7 +203,10 @@ function TaskBoard() {
             key={task.id}
             task={task}
             onDelete={() => handleDeleteTask(task)}
-            onEdit={() => handleTaskUpdate(task)}
+            onEdit={() => {
+              setSelectedTask(task); // Set the selected task
+              setIsEditModalOpen(true); // Open the edit modal
+            }}
             categoryName={getCategoryName(task.categoryId)}
           />
         ))}
@@ -257,7 +265,7 @@ function TaskBoard() {
       <EditTaskModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        task={selectedTask}
+        task={selectedTask} // Pass the selected task here
         onSave={handleTaskUpdate}
         categories={categories}
       />
