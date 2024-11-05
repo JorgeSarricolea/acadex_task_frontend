@@ -6,8 +6,8 @@ import EditTaskModal from "./modals/EditTaskModal";
 import AddTaskButton from "./AddTaskButton";
 import DraggableTaskCard from "./DraggableTaskCard";
 import DeleteTaskModal from "./modals/DeleteTaskModal";
-
-// Import use cases
+import TaskSearch from "./TaskSearch";
+import CategoryFilter from "./CategoryFilter";
 import { FetchHomeworksUseCase } from "@/app/application/use-cases/homework/GetAllHomeworks";
 import { FetchAllCategoriesUseCase } from "@/app/application/use-cases/category/GetAllCategories";
 import { UpdateHomeworkUseCase } from "@/app/application/use-cases/homework/UpdateHomework";
@@ -22,20 +22,22 @@ function TaskBoard() {
   const [backlogTasks, setBacklogTasks] = useState([]);
   const [inProgressTasks, setInProgressTasks] = useState([]);
   const [doneTasks, setDoneTasks] = useState([]);
-  const [categories, setCategories] = useState([]); // State to store categories
+  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentColumn, setCurrentColumn] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
   const [taskToDelete, setTaskToDelete] = useState(null);
-  const [userId, setUserId] = useState(null); // Add this state to hold userId
+  const [userId, setUserId] = useState(null);
 
-  // Fetch userId from sessionStorage on component mount (only in the browser)
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUserId = sessionStorage.getItem("userId");
-      setUserId(storedUserId); // Set the userId from sessionStorage
+      setUserId(storedUserId);
     }
   }, []);
 
@@ -48,6 +50,7 @@ function TaskBoard() {
         userTasks.filter((task) => task.status === "IN_PROGRESS")
       );
       setDoneTasks(userTasks.filter((task) => task.status === "DONE"));
+      setFilteredTasks(userTasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -56,20 +59,18 @@ function TaskBoard() {
   const fetchCategories = async () => {
     try {
       const fetchedCategories = await FetchAllCategoriesUseCase.execute();
-      setCategories(fetchedCategories); // Store categories in the state
+      setCategories(fetchedCategories);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
 
-  // Fetch both tasks and categories
   useEffect(() => {
     if (userId) {
-      // Only fetch tasks if userId is available
       fetchTasks();
     }
-    fetchCategories(); // Fetch categories when the component loads
-  }, [userId]); // Trigger this effect only when userId is set
+    fetchCategories();
+  }, [userId]);
 
   const handleTaskStatusChange = async (task, newStatus) => {
     try {
@@ -129,22 +130,11 @@ function TaskBoard() {
     }
   };
 
-  const openModalForColumn = (column) => {
-    setCurrentColumn(column);
-    setIsModalOpen(true);
-  };
-
-  const handleEditTask = (task) => {
-    setSelectedTask(task);
-    setIsEditModalOpen(true);
-  };
-
   const handleDeleteTask = (task) => {
     setTaskToDelete(task);
     setIsDeleteModalOpen(true);
   };
 
-  // Confirm deletion and proceed to delete task
   const confirmDeleteTask = async () => {
     try {
       if (taskToDelete) {
@@ -161,14 +151,30 @@ function TaskBoard() {
     }
   };
 
+  const handleSearchChange = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    filterTasks(term, selectedCategories);
+  };
+
+  const handleCategoryChange = (selectedCategoryIds) => {
+    setSelectedCategories(selectedCategoryIds);
+    filterTasks(searchTerm, selectedCategoryIds);
+  };
+
+  const filterTasks = (term, categories) => {
+    setFilteredTasks(
+      [...backlogTasks, ...inProgressTasks, ...doneTasks].filter(
+        (task) =>
+          task.title.toLowerCase().includes(term.toLowerCase()) &&
+          (categories.length === 0 || categories.includes(task.categoryId))
+      )
+    );
+  };
+
   const getCategoryName = (categoryId) => {
     const category = categories.find((cat) => cat.id === categoryId);
-
-    if (category) {
-      return category.name;
-    } else {
-      return "Unknown Category";
-    }
+    return category ? category.name : "Unknown Category";
   };
 
   const TaskColumn = ({ status, tasks, onDropTask, onAddTask }) => {
@@ -192,8 +198,8 @@ function TaskBoard() {
             key={task.id}
             task={task}
             onDelete={() => handleDeleteTask(task)}
-            onEdit={() => handleEditTask(task)}
-            categoryName={getCategoryName(task.categoryId)} // Pass the category name to the card
+            onEdit={() => handleTaskUpdate(task)}
+            categoryName={getCategoryName(task.categoryId)}
           />
         ))}
       </div>
@@ -202,22 +208,38 @@ function TaskBoard() {
 
   return (
     <DndProvider backend={HTML5Backend}>
+      <div className="flex justify-between items-start mb-4 gap-12 w-4/5 m-auto">
+        <TaskSearch
+          tasks={[...backlogTasks, ...inProgressTasks, ...doneTasks]}
+          searchTerm={searchTerm}
+          onSearchChange={handleSearchChange}
+          className="flex-grow mr-4"
+        />
+
+        <CategoryFilter
+          categories={categories}
+          selectedCategories={selectedCategories}
+          onCategoryChange={handleCategoryChange}
+          className="w-1/4"
+        />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <TaskColumn
           status="TO_DO"
-          tasks={backlogTasks}
+          tasks={filteredTasks.filter((task) => task.status === "TO_DO")}
           onDropTask={(task) => handleTaskStatusChange(task, "TO_DO")}
           onAddTask={() => openModalForColumn("TO_DO")}
         />
         <TaskColumn
           status="IN_PROGRESS"
-          tasks={inProgressTasks}
+          tasks={filteredTasks.filter((task) => task.status === "IN_PROGRESS")}
           onDropTask={(task) => handleTaskStatusChange(task, "IN_PROGRESS")}
           onAddTask={() => openModalForColumn("IN_PROGRESS")}
         />
         <TaskColumn
           status="DONE"
-          tasks={doneTasks}
+          tasks={filteredTasks.filter((task) => task.status === "DONE")}
           onDropTask={(task) => handleTaskStatusChange(task, "DONE")}
           onAddTask={() => openModalForColumn("DONE")}
         />
