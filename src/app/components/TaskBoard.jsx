@@ -233,41 +233,54 @@ function TaskBoard() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex justify-between items-start mb-4 gap-12 w-4/5 m-auto">
-        <TaskSearch
-          tasks={[...backlogTasks, ...inProgressTasks, ...doneTasks]}
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
-          className="flex-grow mr-4"
-        />
+      <div className="flex flex-col md:flex-row justify-between items-start mb-4 md:gap-12 gap-0 w-full m-auto">
+        <div className="w-full md:w-3/4 mb-4 md:mb-0">
+          <TaskSearch
+            tasks={[...backlogTasks, ...inProgressTasks, ...doneTasks]}
+            searchTerm={searchTerm}
+            onSearchChange={handleSearchChange}
+            className="w-full"
+          />
+        </div>
 
-        <CategoryFilter
-          categories={categories}
-          selectedCategories={selectedCategories}
-          onCategoryChange={handleCategoryChange}
-          className="w-1/4"
-        />
+        <div className="w-full md:w-1/4">
+          <CategoryFilter
+            categories={categories}
+            selectedCategories={selectedCategories}
+            onCategoryChange={handleCategoryChange}
+            className="w-full"
+          />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <TaskColumn
-          status="TO_DO"
-          tasks={filteredTasks.filter((task) => task.status === "TO_DO")}
-          onDropTask={(task) => handleTaskStatusChange(task, "TO_DO")}
-          onAddTask={() => openModalForColumn("TO_DO")}
-        />
-        <TaskColumn
-          status="IN_PROGRESS"
-          tasks={filteredTasks.filter((task) => task.status === "IN_PROGRESS")}
-          onDropTask={(task) => handleTaskStatusChange(task, "IN_PROGRESS")}
-          onAddTask={() => openModalForColumn("IN_PROGRESS")}
-        />
-        <TaskColumn
-          status="DONE"
-          tasks={filteredTasks.filter((task) => task.status === "DONE")}
-          onDropTask={(task) => handleTaskStatusChange(task, "DONE")}
-          onAddTask={() => openModalForColumn("DONE")}
-        />
+      {/* Contenedor de columnas con scroll horizontal en móviles */}
+      <div className="overflow-x-auto md:overflow-visible flex flex-nowrap gap-4 w-full">
+        <div className="flex flex-col column-width md:w-1/3">
+          <TaskColumn
+            status="TO_DO"
+            tasks={filteredTasks.filter((task) => task.status === "TO_DO")}
+            onDropTask={(task) => handleTaskStatusChange(task, "TO_DO")}
+            onAddTask={() => openModalForColumn("TO_DO")}
+          />
+        </div>
+        <div className="flex flex-col column-width md:w-1/3">
+          <TaskColumn
+            status="IN_PROGRESS"
+            tasks={filteredTasks.filter(
+              (task) => task.status === "IN_PROGRESS"
+            )}
+            onDropTask={(task) => handleTaskStatusChange(task, "IN_PROGRESS")}
+            onAddTask={() => openModalForColumn("IN_PROGRESS")}
+          />
+        </div>
+        <div className="flex flex-col column-width md:w-1/3">
+          <TaskColumn
+            status="DONE"
+            tasks={filteredTasks.filter((task) => task.status === "DONE")}
+            onDropTask={(task) => handleTaskStatusChange(task, "DONE")}
+            onAddTask={() => openModalForColumn("DONE")}
+          />
+        </div>
       </div>
 
       <AddTaskModal

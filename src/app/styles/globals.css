@@ -21,6 +21,10 @@ body {
   }
 }
 
+.column-width {
+  min-width: 320px;
+}
+
 .bgBlue {
   background-color: #2148c0;
 }
