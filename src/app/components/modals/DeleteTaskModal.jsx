@@ -6,7 +6,7 @@ const DeleteTaskModal = ({ isOpen, onClose, onConfirm, taskTitle }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+      className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center px-4"
       style={{ zIndex: 1000 }}
     >
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">

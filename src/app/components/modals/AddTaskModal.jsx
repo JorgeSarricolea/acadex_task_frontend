@@ -42,7 +42,7 @@ function AddTaskModal({ isOpen, onClose, onSave, column, userId, categories }) {
 
   return (
     <div
-      className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+      className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center px-4"
       style={{ zIndex: 1000 }}
     >
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg sm:w-3/4 md:w-1/2 lg:w-1/3">
