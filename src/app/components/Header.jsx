@@ -21,6 +21,15 @@ function Header() {
     }
   }, []);
 
+  useEffect(() => {
+    // Bloquear o habilitar el scroll del body
+    if (sidebarOpen) {
+      document.body.style.overflow = "hidden"; // Bloquea el scroll
+    } else {
+      document.body.style.overflow = "auto"; // Habilita el scroll
+    }
+  }, [sidebarOpen]);
+
   const handleLogout = () => {
     clearStorage();
     router.push("/login");
