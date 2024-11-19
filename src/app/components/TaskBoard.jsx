@@ -34,6 +34,27 @@ function TaskBoard() {
   const [taskToDelete, setTaskToDelete] = useState(null);
   const [userId, setUserId] = useState(null);
 
+  const openModalForColumn = (column) => {
+    setCurrentColumn(column);
+    setIsModalOpen(true);
+  };
+
+  const updateAllTasks = (updatedTask) => {
+    const updatedBacklogTasks = backlogTasks.map((task) =>
+      task.id === updatedTask.id ? updatedTask : task
+    );
+    const updatedInProgressTasks = inProgressTasks.map((task) =>
+      task.id === updatedTask.id ? updatedTask : task
+    );
+    const updatedDoneTasks = doneTasks.map((task) =>
+      task.id === updatedTask.id ? updatedTask : task
+    );
+
+    setBacklogTasks(updatedBacklogTasks);
+    setInProgressTasks(updatedInProgressTasks);
+    setDoneTasks(updatedDoneTasks);
+  };
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedUserId = sessionStorage.getItem("userId");
@@ -72,6 +93,16 @@ function TaskBoard() {
     fetchCategories();
   }, [userId]);
 
+  useEffect(() => {
+    filterTasks(searchTerm, selectedCategories);
+  }, [
+    backlogTasks,
+    inProgressTasks,
+    doneTasks,
+    searchTerm,
+    selectedCategories,
+  ]);
+
   const handleTaskStatusChange = async (task, newStatus) => {
     try {
       const updatedTask = await UpdateHomeworkUseCase.execute(task.id, {
@@ -79,15 +110,7 @@ function TaskBoard() {
         status: newStatus,
       });
 
-      setBacklogTasks((prev) => prev.filter((t) => t.id !== task.id));
-      setInProgressTasks((prev) => prev.filter((t) => t.id !== task.id));
-      setDoneTasks((prev) => prev.filter((t) => t.id !== task.id));
-
-      if (newStatus === "TO_DO")
-        setBacklogTasks((prev) => [...prev, updatedTask]);
-      if (newStatus === "IN_PROGRESS")
-        setInProgressTasks((prev) => [...prev, updatedTask]);
-      if (newStatus === "DONE") setDoneTasks((prev) => [...prev, updatedTask]);
+      updateAllTasks(updatedTask);
     } catch (error) {
       console.error("Error updating task status:", error);
     }
@@ -96,12 +119,15 @@ function TaskBoard() {
   const handleAddTask = async (newTask) => {
     try {
       const createdTask = await CreateHomeworkUseCase.execute(newTask);
-      if (createdTask.status === "TO_DO")
+      if (createdTask.status === "TO_DO") {
         setBacklogTasks((prev) => [...prev, createdTask]);
-      if (createdTask.status === "IN_PROGRESS")
+      } else if (createdTask.status === "IN_PROGRESS") {
         setInProgressTasks((prev) => [...prev, createdTask]);
-      if (createdTask.status === "DONE")
+      } else if (createdTask.status === "DONE") {
         setDoneTasks((prev) => [...prev, createdTask]);
+      }
+
+      filterTasks(searchTerm, selectedCategories);
     } catch (error) {
       console.error("Error creating new task:", error);
     }
@@ -114,17 +140,10 @@ function TaskBoard() {
         updatedTaskData
       );
 
-      setBacklogTasks((prev) =>
-        prev.map((t) => (t.id === updatedTask.id ? updatedTask : t))
-      );
-      setInProgressTasks((prev) =>
-        prev.map((t) => (t.id === updatedTask.id ? updatedTask : t))
-      );
-      setDoneTasks((prev) =>
-        prev.map((t) => (t.id === updatedTask.id ? updatedTask : t))
-      );
+      updateAllTasks(updatedTask);
 
       setIsEditModalOpen(false);
+      filterTasks(searchTerm, selectedCategories);
     } catch (error) {
       console.error("Error updating task:", error);
     }
@@ -139,11 +158,8 @@ function TaskBoard() {
     try {
       if (taskToDelete) {
         await DeleteHomeworkUseCase.execute(taskToDelete.id);
-        setBacklogTasks((prev) => prev.filter((t) => t.id !== taskToDelete.id));
-        setInProgressTasks((prev) =>
-          prev.filter((t) => t.id !== taskToDelete.id)
-        );
-        setDoneTasks((prev) => prev.filter((t) => t.id !== taskToDelete.id));
+        removeTaskFromState(taskToDelete.id);
+        filterTasks(searchTerm, selectedCategories);
       }
       setIsDeleteModalOpen(false);
     } catch (error) {
@@ -177,6 +193,12 @@ function TaskBoard() {
     return category ? category.name : "Unknown Category";
   };
 
+  const removeTaskFromState = (taskId) => {
+    setBacklogTasks((prev) => prev.filter((task) => task.id !== taskId));
+    setInProgressTasks((prev) => prev.filter((task) => task.id !== taskId));
+    setDoneTasks((prev) => prev.filter((task) => task.id !== taskId));
+  };
+
   const TaskColumn = ({ status, tasks, onDropTask, onAddTask }) => {
     const [, drop] = useDrop({
       accept: TaskTypes.TASK,
@@ -198,7 +220,10 @@ function TaskBoard() {
             key={task.id}
             task={task}
             onDelete={() => handleDeleteTask(task)}
-            onEdit={() => handleTaskUpdate(task)}
+            onEdit={() => {
+              setSelectedTask(task);
+              setIsEditModalOpen(true);
+            }}
             categoryName={getCategoryName(task.categoryId)}
           />
         ))}
