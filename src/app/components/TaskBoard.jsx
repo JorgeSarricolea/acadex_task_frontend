@@ -295,7 +295,7 @@ function TaskBoard() {
       <EditTaskModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        task={selectedTask}
+        task={selectedTask} // Pass the selected task here
         onSave={handleTaskUpdate}
         categories={categories}
       />
