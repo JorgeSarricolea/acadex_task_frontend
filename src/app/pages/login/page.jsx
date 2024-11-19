@@ -93,20 +93,22 @@ export default function Login() {
             onChange={handleChange}
           />
 
-          <button
-            type="submit"
-            className="signup__btn border border-white my-4 w-1/2 sm:w-full p-2 rounded-md bg-white text-blue-700 font-montserrat text-base font-semibold shadow-lg"
-          >
-            INICIAR SESIÓN
-          </button>
+          <div className="flex flex-col gap-0 justify-center mx-10 md:mx-0 md:gap-4">
+            <button
+              type="submit"
+              className="signup__btn border border-white my-4 sm:my-0 w-full p-2 rounded-md bg-white text-blue-700 font-montserrat text-base font-semibold shadow-lg"
+            >
+              INICIAR SESIÓN
+            </button>
 
-          <button
-            type="button"
-            className="signup__btn border border-white my-4 w-1/2 sm:w-full p-2 rounded-md bg-white text-blue-700 font-montserrat text-base font-semibold shadow-lg"
-            onClick={() => router.push("/signup")}
-          >
-            REGISTRATE
-          </button>
+            <button
+              type="button"
+              className="signup__btn border border-white my-4 sm:my-0 w-full p-2 rounded-md bg-white text-blue-700 font-montserrat text-base font-semibold shadow-lg"
+              onClick={() => router.push("/signup")}
+            >
+              REGISTRATE
+            </button>
+          </div>
         </form>
 
         {/* Mensaje de error */}
