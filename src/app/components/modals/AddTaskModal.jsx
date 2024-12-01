@@ -7,23 +7,42 @@ function AddTaskModal({ isOpen, onClose, onSave, column, userId, categories }) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSave = (e) => {
     e.preventDefault();
 
+    // Validación: el título y la categoría son obligatorios
     if (title.trim() === "" || categoryId.trim() === "") {
-      alert("El título y la categoría son obligatorios.");
+      setErrorMessage("Title and category are mandatory.");
       return;
     }
 
-    const isoStartDate = startDate ? new Date(startDate).toISOString() : null;
-    const isoEndDate = endDate ? new Date(endDate).toISOString() : null;
+    const now = new Date();
+    const isoStartDate = startDate ? new Date(startDate) : null;
+    const isoEndDate = endDate ? new Date(endDate) : null;
+
+    // Validación: la fecha de inicio no puede ser anterior a hoy
+    if (isoStartDate && isoStartDate < now.setHours(0, 0, 0, 0)) {
+      setErrorMessage(
+        "The start date cannot be earlier than the current date."
+      );
+      return;
+    }
+
+    // Validación: la fecha de finalización no puede ser anterior ni igual a la de inicio
+    if (isoStartDate && isoEndDate && isoEndDate <= isoStartDate) {
+      setErrorMessage(
+        "The end date cannot be earlier or equal to the start date and time."
+      );
+      return;
+    }
 
     const newTask = {
       title,
       description,
-      startDate: isoStartDate,
-      endDate: isoEndDate,
+      startDate: isoStartDate ? isoStartDate.toISOString() : null,
+      endDate: isoEndDate ? isoEndDate.toISOString() : null,
       categoryId,
       status: column,
       userId,
@@ -36,6 +55,7 @@ function AddTaskModal({ isOpen, onClose, onSave, column, userId, categories }) {
     setStartDate("");
     setEndDate("");
     setCategoryId("");
+    setErrorMessage("");
   };
 
   if (!isOpen) return null;
@@ -49,6 +69,9 @@ function AddTaskModal({ isOpen, onClose, onSave, column, userId, categories }) {
         <h2 className="text-3xl font-semibold mb-4 text-blue-600">
           Add new task
         </h2>
+        {errorMessage && (
+          <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
+        )}
         <form className="space-y-4" onSubmit={handleSave}>
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -79,7 +102,7 @@ function AddTaskModal({ isOpen, onClose, onSave, column, userId, categories }) {
               Start date
             </label>
             <input
-              type="date"
+              type="datetime-local"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -91,7 +114,7 @@ function AddTaskModal({ isOpen, onClose, onSave, column, userId, categories }) {
               Due date
             </label>
             <input
-              type="date"
+              type="datetime-local"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
